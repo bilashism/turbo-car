@@ -1,9 +1,22 @@
 import React from "react";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../context/AuthProvider/AuthProvider";
 
 const Login = () => {
+  const { userLogin } = useContext(AuthContext);
+
   const handleLogin = ev => {
     ev.preventDefault();
+    const form = ev.target;
+    const email = form.email.value;
+    const password = form.password.value;
+
+    userLogin(email, password)
+      .then(result => {
+        console.log(result);
+      })
+      .catch(err => console.error(err));
   };
 
   return (
@@ -35,7 +48,7 @@ const Login = () => {
                 <span className="label-text">Password</span>
               </label>
               <input
-                type="text"
+                type="password"
                 placeholder="password"
                 className="input input-bordered"
                 name="password"
