@@ -8,7 +8,7 @@ import dns from "dns";
 dns.setDefaultResultOrder("verbatim");
 
 export default defineConfig({
-  plugins: [mkcert(), react()],
+  plugins: [mkcert(), react(), require("daisyui")],
   server: {
     https: true,
     host: true,
