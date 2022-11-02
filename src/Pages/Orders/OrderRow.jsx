@@ -2,9 +2,18 @@ import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 
-const OrderRow = ({ order, handleDelete }) => {
-  const { _id, serviceId, service, customer, email, phone, message, price } =
-    order;
+const OrderRow = ({ order, handleDelete, handleStatusUpdate }) => {
+  const {
+    _id,
+    serviceId,
+    service,
+    customer,
+    email,
+    phone,
+    message,
+    price,
+    status
+  } = order;
 
   const [orderService, setOrderService] = useState({});
 
@@ -54,7 +63,11 @@ const OrderRow = ({ order, handleDelete }) => {
       </td>
       <td>{phone}</td>
       <th>
-        <button className="btn btn-ghost btn-xs">{message}</button>
+        <button
+          className="btn btn-ghost btn-xs"
+          onClick={() => handleStatusUpdate(_id)}>
+          {status ? status : `pending`}
+        </button>
       </th>
     </tr>
   );

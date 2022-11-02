@@ -34,6 +34,27 @@ const Orders = () => {
         .catch(err => console.error(err));
     }
   };
+  const handleStatusUpdate = id => {
+    fetch(`http://localhost:5000/orders/${id}`, {
+      method: "put",
+      headers: {
+        "content-type": "application/json"
+      },
+      body: JSON.stringify({ status: "approved" })
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.modifiedCount >= 1) {
+          alert("approved success");
+
+          const remainingOrders = orders.filter(order => order._id !== id);
+          const approvedOrder = orders.find(order => order._id === id);
+          const newOrders = [approvedOrder, ...remainingOrders];
+          setOrders(newOrders);
+        }
+      })
+      .catch(err => console.error(err));
+  };
 
   return (
     <div>
@@ -62,6 +83,7 @@ const Orders = () => {
                     key={order._id}
                     order={order}
                     handleDelete={handleDelete}
+                    handleStatusUpdate={handleStatusUpdate}
                   />
                 ))}
               </tbody>
