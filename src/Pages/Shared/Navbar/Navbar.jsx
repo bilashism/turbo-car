@@ -4,7 +4,15 @@ import { Link } from "react-router-dom";
 import logo from "../../../assets/logo.svg";
 import { AuthContext } from "../../../context/AuthProvider/AuthProvider";
 const Navbar = () => {
-  const { user } = useContext(AuthContext);
+  const { user, userLogOut } = useContext(AuthContext);
+  const handleUserLogOut = () => {
+    userLogOut()
+      .then(res => res.json())
+      .then(data => {
+        console.log(data);
+      })
+      .catch(err => console.error(err));
+  };
   const menuItems = (
     <>
       <li>
@@ -16,7 +24,9 @@ const Navbar = () => {
             <Link to="/orders">Orders</Link>
           </li>
           <li>
-            <button type="button">Log out</button>
+            <button onClick={handleUserLogOut} type="button">
+              Log out
+            </button>
           </li>
         </>
       ) : (
