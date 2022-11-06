@@ -5,23 +5,37 @@ import { AuthContext } from "../../context/AuthProvider/AuthProvider";
 import OrderRow from "./OrderRow";
 
 const Orders = () => {
-  const { user } = useContext(AuthContext);
+  const { user, userLogOut } = useContext(AuthContext);
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/orders?email=${user?.email}`)
-      .then(res => res.json())
+    fetch(`http://localhost:5000/orders?email=${user?.email}`, {
+      headers: {
+        authorization: `Bearer ${localStorage.getItem(`turboCarToken`)}`
+      }
+    })
+      .then(res => {
+        if (res.status === 401 || res.status === 403) {
+          return userLogOut();
+        }
+        return res.json();
+      })
       .then(data => {
         setOrders(data);
         console.log(data);
       })
       .catch(err => console.error(err));
-  }, [user?.email]);
+  }, [user?.email, userLogOut]);
 
   const handleDelete = id => {
     const confirm = window.confirm(`Are you sure to delete?`);
     if (confirm) {
-      fetch(`http://localhost:5000/orders/${id}`, { method: "delete" })
+      fetch(`http://localhost:5000/orders/${id}`, {
+        method: "delete",
+        headers: {
+          authorization: `Bearer ${localStorage.getItem(`turboCarToken`)}`
+        }
+      })
         .then(res => res.json())
         .then(data => {
           if (data.deletedCount >= 1) {
@@ -38,7 +52,8 @@ const Orders = () => {
     fetch(`http://localhost:5000/orders/${id}`, {
       method: "put",
       headers: {
-        "content-type": "application/json"
+        "content-type": "application/json",
+        authorization: `Bearer ${localStorage.getItem(`turboCarToken`)}`
       },
       body: JSON.stringify({ status: "approved" })
     })

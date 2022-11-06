@@ -18,6 +18,21 @@ const Login = () => {
     userLogin(email, password)
       .then(result => {
         console.log(result);
+        const curUser = { email: result.user.email };
+        // get jwt token
+        fetch(`http://localhost:5000/jwt`, {
+          method: "post",
+          headers: {
+            "content-type": "application/json"
+          },
+          body: JSON.stringify(curUser)
+        })
+          .then(res => res.json())
+          .then(data => {
+            console.log(data);
+            localStorage.setItem("turboCarToken", data.token);
+          })
+          .catch(err => console.error(err));
         navigate(from, { replace: true });
       })
       .catch(err => console.error(err));

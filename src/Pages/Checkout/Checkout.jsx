@@ -28,7 +28,8 @@ const Checkout = () => {
     fetch(`http://localhost:5000/orders`, {
       method: "post",
       headers: {
-        "content-type": "application/json"
+        "content-type": "application/json",
+        authorization: `Bearer ${localStorage.getItem(`turboCarToken`)}`
       },
       body: JSON.stringify(order)
     })

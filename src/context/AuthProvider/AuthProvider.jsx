@@ -24,7 +24,10 @@ const AuthProvider = ({ children }) => {
     setLoading(true);
     return signInWithEmailAndPassword(auth, email, password);
   };
-  const userLogOut = () => signOut(auth);
+  const userLogOut = () => {
+    localStorage.removeItem("turboCarToken");
+    return signOut(auth);
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, currentUser => {
